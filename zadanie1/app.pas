@@ -1,6 +1,3 @@
-// docker run -it -v ${PWD}:/home/student/projobj/ kprzystalski/projobj-pascal:latest fpc app.pas
-// docker run -it -v ${PWD}:/home/student/projobj/ kprzystalski/projobj-pascal:latest ./app
-
 Program app;
 
 Var dataArray: array Of integer;
@@ -22,4 +19,6 @@ End;
 
 Begin
   generateNumbers(0, 100, 50);
+
+  Writeln('debug')
 End.
