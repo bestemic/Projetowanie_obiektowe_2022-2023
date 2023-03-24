@@ -1,11 +1,12 @@
 package pl.edu.uj.projobj
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
 @RestController
-class ProductController {
+class ProductController @Autowired constructor(private val authService: AuthService) {
 
     val productList = listOf(
         Product(1, "bread", 1.20),
@@ -13,13 +14,32 @@ class ProductController {
         Product(3, "chocolate", 5.0)
     )
 
+    @PostMapping("/")
+    fun authenticate(@RequestBody request: LoginRequest): ResponseEntity<String> {
+        val result = authService.login(request.username, request.password)
+
+        return if (result == null) {
+            ResponseEntity.status(HttpStatus.CONFLICT).body("Currently logged in")
+        } else if (result) {
+            ResponseEntity.ok("Logged in as ${request.username}")
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password")
+        }
+    }
+
     @GetMapping("/")
-    fun getAllProducts(): List<Product> {
-        return productList
+    fun getAllProducts(): ResponseEntity<List<Product>> {
+        if (authService.isLoggedIn()) {
+            return ResponseEntity.ok(productList)
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(emptyList())
     }
 
     @GetMapping("/{id}")
-    fun getProduct(@PathVariable id: Int): Product {
-        return productList[id - 1]
+    fun getProduct(@PathVariable id: Int): ResponseEntity<Product> {
+        if (authService.isLoggedIn()) {
+            return ResponseEntity.ok(productList[id - 1])
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
     }
 }
