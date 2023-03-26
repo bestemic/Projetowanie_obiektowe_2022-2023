@@ -3,28 +3,34 @@
 {% block title %}Product{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
+    <div class="container">
+        <h2 class="text-center mt-5 mb-3">Show product</h2>
+        <div class="card">
+            <div class="card-header">
+            <form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                <a
+                    class="btn btn-outline-info"
+                    href="{{ path('app_product_index') }}">
+                    View all products
+                </a>
+                <a
+                    class="btn btn-outline-success"
+                    href="{{ path('app_product_edit', {'id': product.id}) }}">
+                    Edit
+                </a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.name }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ product.price }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_product_index') }}">back to list</a>
-
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                <button class="btn btn-outline-danger">Delete</button>
+            </form>
+            </div>
+            <div class="card-body">
+                <b class="text-muted">Id:</b>
+                <p>{{ product.id }}</p>
+                <b class="text-muted">Name:</b>
+                <p>{{ product.name }}</p>
+                <b class="text-muted">Price:</b>
+                <p>{{ product.price }}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

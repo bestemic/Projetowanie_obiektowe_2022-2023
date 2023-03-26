@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product controller{% endblock %}
+{% block title %}Category controller{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h2 class="text-center mt-5 mb-3">Product controller</h2>
+        <h2 class="text-center mt-5 mb-3">Category controller</h2>
         <div class="card">
             <div class="card-header">
-                <a class="btn btn-outline-primary" href="{{ path('app_product_new') }}">
-                    Create new product
+                <a class="btn btn-outline-primary" href="{{ path('app_category_new') }}">
+                    Create new category
                 </a>
             </div>
             <div class="card-body">
@@ -16,29 +16,29 @@
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
-                        <th>Price</th>
+                        <th>Description</th>
                         <th width="240px">Action</th>
                     </tr>
-                    {% for product in products %}
+                    {% for category in categories %}
                     <tr>
-                        <td>{{ product.id }}</td>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.price }}</td>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.description }}</td>
 
                         <td>
-                            <form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <form method="post" action="{{ path('app_category_delete', {'id': category.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                 <a
                                     class="btn btn-outline-info"
-                                    href="{{ path('app_product_show', {'id': product.id}) }}">
+                                    href="{{ path('app_category_show', {'id': category.id}) }}">
                                     Show
                                 </a>
                                 <a
                                     class="btn btn-outline-success"
-                                    href="{{ path('app_product_edit', {'id': product.id}) }}">
+                                    href="{{ path('app_category_edit', {'id': category.id}) }}">
                                     Edit
                                 </a>
 
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
                                 <button class="btn btn-outline-danger">Delete</button>
                             </form>
                         </td>
