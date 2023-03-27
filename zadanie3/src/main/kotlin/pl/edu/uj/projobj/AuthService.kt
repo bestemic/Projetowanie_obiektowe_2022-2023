@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service
 
 @Service
 object AuthService {
-    private val users = mapOf("admin" to "admin")
+    private val users = mapOf(
+        "admin" to "admin",
+        "user" to "user"
+    )
     private var currentUser: String? = null
 
     fun login(username: String, password: String): Boolean? {
@@ -22,5 +25,9 @@ object AuthService {
 
     fun isLoggedIn(): Boolean {
         return currentUser != null
+    }
+
+    fun logout() {
+        currentUser = null
     }
 }
