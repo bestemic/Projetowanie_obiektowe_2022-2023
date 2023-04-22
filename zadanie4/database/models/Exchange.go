@@ -6,4 +6,5 @@ type Exchange struct {
 	gorm.Model
 	Currency string
 	Value    float32
+	Date     string
 }

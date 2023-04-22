@@ -2,9 +2,8 @@ package controllers
 
 import (
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 	"net/http"
-	"zadanie4/database/models"
+	"zadanie4/proxy"
 )
 
 type ExchangeController struct {
@@ -12,10 +11,12 @@ type ExchangeController struct {
 
 func (w *ExchangeController) GetExchange(c echo.Context) error {
 
-	db := c.Get("db").(*gorm.DB)
+	exchangeProxy := proxy.ExchangeProxy{}
+	exchangeData, err := exchangeProxy.GetExchange(c)
 
-	var exchanges []models.Exchange
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
-	db.Find(&exchanges)
-	return c.JSON(http.StatusInternalServerError, exchanges)
+	return c.JSON(http.StatusOK, exchangeData)
 }
