@@ -14,7 +14,7 @@ export const Products = () => {
                 <table>
                     <thead>
                     <tr>
-                        <th>Nowa nazwa</th>
+                        <th>Nazwa</th>
                         <th>Cena</th>
                     </tr>
                     </thead>
