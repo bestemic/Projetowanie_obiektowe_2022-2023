@@ -5,7 +5,7 @@ WORKDIR frontend
 
 COPY . .
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 RUN chown -R node:node /frontend
 RUN chmod -R 755 /frontend
