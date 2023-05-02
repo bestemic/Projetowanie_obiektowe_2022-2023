@@ -17,6 +17,8 @@ ENV PATH=$PATH:/root/.sdkman/candidates/scala/2.13.10/bin
 RUN mkdir backend
 WORKDIR backend
 
+COPY . .
+
 EXPOSE 9000
 
 CMD ["sbt", "run"]

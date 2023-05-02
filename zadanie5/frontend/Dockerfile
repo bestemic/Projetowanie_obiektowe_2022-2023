@@ -3,6 +3,15 @@ FROM node:18.16.0
 RUN mkdir frontend
 WORKDIR frontend
 
+COPY . .
+
+RUN npm ci
+
+RUN chown -R node:node /frontend
+RUN chmod -R 755 /frontend
+
+USER node
+
 EXPOSE 5173
 
-CMD ["/bin/bash", "-c", "npm ci;npm run dev"]
+CMD ["npm", "run", "dev"]
