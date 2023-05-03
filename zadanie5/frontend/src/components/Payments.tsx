@@ -25,7 +25,9 @@ export const Payments = () => {
         event.preventDefault();
         paymentData.cvc = parseInt(String(paymentData.cvc));
         paymentData.toPay = toPay;
-        makePayment(paymentData).then((res) => setMessage(res));
+        makePayment(paymentData)
+            .then((res) => setMessage(res))
+            .catch(console.log);
         clearProducts()
     };
 

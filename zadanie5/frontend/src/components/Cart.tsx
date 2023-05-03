@@ -10,13 +10,15 @@ export const Cart = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        sendCart(cart).then((res) => {
-            navigate('/payments', {
-                state: {
-                    toPay: res
-                }
+        sendCart(cart)
+            .then((res) => {
+                navigate('/payments', {
+                    state: {
+                        toPay: res
+                    }
+                })
             })
-        });
+            .catch(console.log);
     };
 
     return (

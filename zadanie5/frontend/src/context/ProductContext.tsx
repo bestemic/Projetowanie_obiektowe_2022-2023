@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from 'react';
 import {Product} from "../interfaces/ProductInterface";
 import getProducts from "../api/ProductsApi";
 import {ShopContextState} from "../interfaces/ShopContextStateInterface";
@@ -12,12 +12,14 @@ type Props = {
 export const ProductContextProvider = ({children}: Props) => {
     const [products, setProducts] = useState<Product[]>([]);
 
-    const providerValue: ShopContextState = {
+    const providerValue = useMemo<ShopContextState>(() => ({
         products,
-    }
+    }), [products]);
 
     useEffect(() => {
-        getProducts().then((products) => setProducts(products))
+        getProducts()
+            .then((products) => setProducts(products))
+            .catch(console.log);
     }, []);
 
     return (

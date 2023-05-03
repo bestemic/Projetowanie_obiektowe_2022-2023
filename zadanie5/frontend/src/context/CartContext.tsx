@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Product} from '../interfaces/ProductInterface';
 import {CartItem} from '../interfaces/CartItemInterface';
 import {CartContextState} from '../interfaces/CartContextStateInterface';
@@ -12,7 +12,7 @@ type Props = {
 export const CartContextProvider = ({children}: Props) => {
     const [cart, setCart] = useState<CartItem[]>([]);
 
-    const addProduct = (product: Product) => {
+    const addProduct = useCallback((product: Product) => {
         const existingProduct = cart.find((i) => i.id === product.id);
 
         if (existingProduct) {
@@ -24,9 +24,9 @@ export const CartContextProvider = ({children}: Props) => {
         } else {
             setCart((prevItems) => [...prevItems, {...product, quantity: 1}]);
         }
-    };
+    }, [cart]);
 
-    const removeProduct = (id: number) => {
+    const removeProduct = useCallback((id: number) => {
         setCart((prevItems) => prevItems.map((item) => {
             if (item.id === id) {
                 return {...item, quantity: item.quantity - 1};
@@ -34,18 +34,18 @@ export const CartContextProvider = ({children}: Props) => {
                 return item;
             }
         }).filter((i) => i.quantity > 0));
-    };
+    }, []);
 
-    const clearProducts = () => {
+    const clearProducts = useCallback(() => {
         setCart([]);
-    };
+    }, []);
 
-    const providerValue: CartContextState = {
+    const providerValue = useMemo<CartContextState>(() => ({
         cart,
         addProduct,
         removeProduct,
         clearProducts
-    };
+    }), [addProduct, cart, removeProduct, clearProducts])
 
     return <CartContext.Provider value={providerValue}>{children}</CartContext.Provider>;
 };
