@@ -12,7 +12,7 @@ COPY ./tsconfig.json /frontend/tsconfig.json
 COPY ./tsconfig.node.json /frontend/tsconfig.node.json
 COPY ./vite.config.ts /frontend/vite.config.ts
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 RUN chown -R node:node /frontend
 RUN chmod -R 755 /frontend
