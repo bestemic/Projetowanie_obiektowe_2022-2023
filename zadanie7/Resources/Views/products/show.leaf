@@ -2,6 +2,7 @@
 
 <h2>Name: #(product.name)</h2>
 <p>Price: #(product.price)</p>
+<p>Category: #(product.category.name)</p>
 
 <button onclick="location.href='/products/#(product.id)/edit'" type="button">Edit</button>
 <form id="deleteForm" action="/products/#(product.id)/delete" method="POST">

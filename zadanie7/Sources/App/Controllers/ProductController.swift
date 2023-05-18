@@ -13,34 +13,56 @@ struct ProductController: RouteCollection {
         }
     }
 
-    func getAll(req: Request) async throws -> [Product] {
-        try await Product.query(on: req.db).all()
+    func getAll(req: Request) throws -> EventLoopFuture<[Product]> {
+        return Product.query(on: req.db)
+            .with(\.$category)
+            .all()
     }
 
-    func getById(req: Request) async throws -> Product {
-        guard let product = try await Product.find(req.parameters.get("productID"), on: req.db) else {
-            throw Abort(.notFound)
+    func getById(req: Request) throws -> EventLoopFuture<Product> {
+        guard let productID = req.parameters.get("productID", as: UUID.self) else {
+            throw Abort(.badRequest)
         }
-        return product
-    }
+
+        return Product.query(on: req.db)
+            .filter(\.$id == productID)
+            .with(\.$category)
+            .first()
+            .unwrap(or: Abort(.notFound))
+    }   
 
     func create(req: Request) async throws -> Product {
-        let product = try req.content.decode(Product.self)
+        let productData = try req.content.decode(CreateProductData.self)
+        let categoryID = productData.categoryID
+
+        guard let category = try await Category.find(categoryID, on: req.db) else {
+            throw Abort(.notFound)
+        }
+        
+        let product = Product(name: productData.name, price: productData.price, categoryID: categoryID)
         try await product.save(on: req.db)
         return product
     }
 
-    func update(req: Request) async throws -> Product {
-        guard let product = try await Product.find(req.parameters.get("productID"), on: req.db) else {
-            throw Abort(.notFound)
-        }
+    func update(req: Request) throws ->  EventLoopFuture<Product> {
+        guard let productID = req.parameters.get("productID", as: UUID.self) else {
+            throw Abort(.badRequest)
+        }   
 
-        let updatedProduct = try req.content.decode(Product.self)
-        product.name = updatedProduct.name
-        product.price = updatedProduct.price
+        let updatedProduct = try req.content.decode(CreateProductData.self)
 
-        try await product.update(on: req.db)
-        return product
+        return Product.find(productID, on: req.db)
+            .unwrap(or: Abort(.notFound))
+            .flatMap { product in
+                product.name = updatedProduct.name
+                product.price = updatedProduct.price
+                return Category.find(updatedProduct.categoryID, on: req.db)
+                    .unwrap(or: Abort(.notFound))
+                    .flatMap { category in
+                        product.$category.id = category.id!
+                        return product.update(on: req.db).map { product }
+                    }
+            }
     }
 
     func delete(req: Request) async throws -> HTTPStatus {

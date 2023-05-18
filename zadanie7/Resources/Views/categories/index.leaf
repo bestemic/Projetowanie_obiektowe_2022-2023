@@ -1,0 +1,17 @@
+<h1>Categories list</h1>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Details</th>
+    </tr>
+    #for(category in categories):
+        <tr>
+            <td>#(category.name)</td>
+            <td><button onclick="location.href='/categories/#(category.id)'" type="button">Details</button></td>
+        </tr>
+    #endfor        
+</table>
+
+<br>
+<button onclick="location.href='/categories/new'" type="button">Add category</button>

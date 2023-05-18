@@ -11,6 +11,7 @@ public func configure(_ app: Application) async throws {
 
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
     app.migrations.add(CreateProduct())
+    app.migrations.add(CreateCategory())
 
     let redisPoolOptions: RedisConfiguration.PoolOptions = RedisConfiguration.PoolOptions(maximumConnectionCount: .maximumActiveConnections(2))
     app.redis.configuration = try RedisConfiguration(hostname: "localhost",  pool: redisPoolOptions)

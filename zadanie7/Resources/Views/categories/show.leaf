@@ -1,0 +1,19 @@
+<h1>Category</h1>
+
+<h2>Name: #(category.name)</h2>
+
+<button onclick="location.href='/categories/#(category.id)/edit'" type="button">Edit</button>
+<form id="deleteForm" action="/categories/#(category.id)/delete" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <button onclick="confirmDelete()" type="button">Delete</button>
+</form>
+<button onclick="location.href='/categories'" type="button">Return</button>
+
+
+<script>
+function confirmDelete(categoryId) {
+    if (confirm('Czy na pewno chcesz usunąć ten element?')) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
