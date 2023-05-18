@@ -1,0 +1,20 @@
+<h1>Product</h1>
+
+<h2>Name: #(product.name)</h2>
+<p>Price: #(product.price)</p>
+
+<button onclick="location.href='/products/#(product.id)/edit'" type="button">Edit</button>
+<form id="deleteForm" action="/products/#(product.id)/delete" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <button onclick="confirmDelete()" type="button">Delete</button>
+</form>
+<button onclick="location.href='/products'" type="button">Return</button>
+
+
+<script>
+function confirmDelete(productId) {
+    if (confirm('Czy na pewno chcesz usunąć ten element?')) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
