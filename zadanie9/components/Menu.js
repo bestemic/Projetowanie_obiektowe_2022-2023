@@ -10,8 +10,8 @@ const Drawer = createDrawerNavigator();
 
 const Menu = () => {
     const [categories, setCategories] = useState([]);
-    const renderProductsScreen = (category) => {
-        return () => <Products category={category}/>;
+    const renderProductsScreen = (navigation, category) => {
+        return () => <Products navigation={navigation} category={category}/>;
     };
 
     useEffect(() => {
@@ -36,9 +36,10 @@ const Menu = () => {
                     <Drawer.Screen
                         key={category.id}
                         name={category.name}
-                        component={renderProductsScreen(category)}
                         options={{drawerLabel: category.name}}
-                    />
+                    >
+                        {(props) => renderProductsScreen(props.navigation, category)(props)}
+                    </Drawer.Screen>
                 ))}
             </Drawer.Navigator>
         </NavigationContainer>

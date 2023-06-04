@@ -1,8 +1,11 @@
 import Menu from "./components/Menu";
+import {CartProvider} from "./context/CartContext";
 
 export default function App() {
 
     return (
-        <Menu/>
+        <CartProvider>
+            <Menu/>
+        </CartProvider>
     );
 }

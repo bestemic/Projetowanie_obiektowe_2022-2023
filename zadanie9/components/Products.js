@@ -1,9 +1,12 @@
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {getProducts} from "../services/products";
+import {CartContext} from "../context/CartContext";
+import CartBadge from "./CartBadge";
 
-const Products = ({category}) => {
+const Products = ({navigation, category}) => {
     const [products, setProducts] = useState([]);
+    const {addToCart} = useContext(CartContext);
 
     useEffect(() => {
         const products = getProducts(category.id);
@@ -22,16 +25,15 @@ const Products = ({category}) => {
         );
     };
 
-    const addToCart = (product) => {
-        console.log('Added to cart:', product);
-    };
-
     return (
-        <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}} style={{flex: 1}}>
-            <Text style={{fontSize: 30, fontWeight: 'bold',}}>{"\n\n"}Products for category</Text>
-            <Text style={{fontSize: 30, fontWeight: 'bold',}}>{category.name.toLowerCase()}{"\n"}</Text>
-            {products.map((product) => renderProduct(product))}
-        </ScrollView>
+        <View style={{flex: 1, flexDirection: 'column'}}>
+            <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}} style={{flex: 1}}>
+                <Text style={{fontSize: 30, fontWeight: 'bold',}}>{"\n\n"}Products for category</Text>
+                <Text style={{fontSize: 30, fontWeight: 'bold',}}>{category.name.toLowerCase()}{"\n"}</Text>
+                {products.map((product) => renderProduct(product))}
+            </ScrollView>
+            <CartBadge navigation={navigation}/>
+        </View>
     );
 }
 
