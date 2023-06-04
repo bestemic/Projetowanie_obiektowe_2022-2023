@@ -10,10 +10,7 @@ const Drawer = createDrawerNavigator();
 
 const Menu = () => {
     const [categories, setCategories] = useState([]);
-
-
     const renderProductsScreen = (category) => {
-        console.log(category)
         return () => <Products category={category}/>;
     };
 
