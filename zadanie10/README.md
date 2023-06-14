@@ -1,3 +1,3 @@
 # Deployment
 
-[Aplikacja](https://proj-obiektowe-front.azurewebsites.net/)
+[Aplikacja](https://uj-app-frontend.azurewebsites.net)
