@@ -32,3 +32,20 @@ jobs:
       run: |
         docker build -t $DOCKER_USER/uj-app-backend .
         docker push $DOCKER_USER/uj-app-backend
+
+  send_email:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3.7.2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.EMAIL_USERNAME}}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Build finished
+          body: Build job of ${{github.repository}} completed successfully!
+          to: ${{secrets.EMAIL_USERNAME}}
+          from: ${{secrets.EMAIL_USERNAME}}
+      
